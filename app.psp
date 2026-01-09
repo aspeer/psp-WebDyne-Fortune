@@ -1,0 +1,8 @@
+<start_html title="Your Fortune" style="@{'app.css?v1.0.0', $WebDyne::WEBDYNE_HTML_PARAM->{'style'}}">
+<perl require='app.pm' import='fortune'/>
+<p>
+Perl quote:
+<p>
+<i><? fortune() ?></i>
+<p>
+<button onclick="location.reload()">Refresh</button>
