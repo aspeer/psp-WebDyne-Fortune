@@ -1,4 +1,4 @@
-name: Cleanup old images
+name: Cleanup
 on:
   push:
     #branches: [ "main" ]
