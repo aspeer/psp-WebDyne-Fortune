@@ -14,7 +14,7 @@ use File::Spec;
 
 #  Version info
 #
-$VERSION='1.001';
+$VERSION='1.002';
 
 
 #  Initialise fortune object

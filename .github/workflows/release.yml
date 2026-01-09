@@ -24,7 +24,8 @@ jobs:
       - name: Set up archive name
         id: vars
         run: |
-          VERSION=${GITHUB_REF#refs/tags/}
+          VERSION_FROM=$(find . -name 'app.pm' | head -n 1)
+          VERSION=$(perl -ne "print \$1 if (m{\\\$VERSION\\s*=\\s*['\"]([^'\"]+)['\"]})" "$VERSION_FROM")
           NAME="psp-webdyne-fortune-${VERSION}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "NAME=$NAME" >> $GITHUB_ENV
