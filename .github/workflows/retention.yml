@@ -21,6 +21,6 @@ jobs:
         with:
           image-names: psp-webdyne-fortune
           cut-off: 1h
-          keep-at-least: 6
+          keep-n-most-recent: 4
           account: user
           token: ${{ secrets.GHCR_PAT }}   # or GITHUB_TOKEN if appropriate
