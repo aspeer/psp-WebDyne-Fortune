@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Run retention action
-        uses: snok/container-retention-policy
+        uses: snok/container-retention-policy@v3
         with:
           image-names: psp-webdyne-fortune
           cut-off: 1h
