@@ -92,11 +92,11 @@ carton install --deployment
 
 # Run
 #
-WEBDYNE_CONF=./webdyne.conf.pl carton exec webdyne.psgi
+carton exec webdyne.psgi
 
 # Start on a different port
 #
-WEBDYNE_CONF=./webdyne.conf.pl carton exec webbdyne.psgi --port=5004 
+carton exec webdyne.psgi --port=5004 
 
 ```
 
@@ -125,4 +125,3 @@ starman $(which webdyne.psgi) .
 starman $(which webdyne.psgi) --port 5002 .
 
 ```
-
