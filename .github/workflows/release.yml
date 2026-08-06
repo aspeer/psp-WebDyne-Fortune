@@ -20,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up archive name
         id: vars
@@ -38,7 +38,7 @@ jobs:
           tar -czf "dist/${ARCHIVE}" --exclude=dist .
 
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v3
         with:
           files: dist/${{ env.ARCHIVE }}
         env:
