@@ -42,6 +42,21 @@ body > hr {
   line-height: 1.65;
 }
 
-body > button {
+.fortune-actions {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+}
+
+.fortune-actions button {
   font-weight: 650;
+}
+
+.webdyne-version {
+  color: #98a2b3;
+  font-size: 0.68rem;
+  font-style: normal;
+  line-height: 1;
 }
