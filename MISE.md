@@ -57,6 +57,14 @@ The task sets:
 - `REPO_NAME=webdyne-fortune`
 - `FUNCTION_NAME=webdyne-fortune`
 
+Terraform infrastructure tasks are exposed through the Makefile rather than
+mise because they should use a separate bootstrap/admin AWS profile:
+
+```bash
+make terraform-plan TF_AWS_PROFILE=<admin-profile>
+make terraform-deploy TF_AWS_PROFILE=<admin-profile>
+```
+
 ## Local Overrides
 
 Use `.mise.local.toml` for machine-local overrides. It is ignored by git.

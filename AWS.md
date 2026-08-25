@@ -91,6 +91,18 @@ The real `.tfvars` file is ignored by git.
 Do not put AWS account IDs or credentials into Terraform variables. Account
 identity is read from the active AWS profile at runtime.
 
+From the repo root, the Makefile exposes Terraform helpers:
+
+```bash
+make terraform-init TF_AWS_PROFILE=<admin-profile>
+make terraform-plan TF_AWS_PROFILE=<admin-profile>
+make terraform-deploy TF_AWS_PROFILE=<admin-profile>
+make lambda-url TF_AWS_PROFILE=<admin-profile>
+```
+
+`terraform-deploy` runs `terraform apply`, so use `terraform-plan` first unless
+you are intentionally applying a known infrastructure change.
+
 ## First Import Of Existing Resources
 
 The current AWS resources were created before Terraform was added. Import them
@@ -137,6 +149,5 @@ AWS_PROFILE=<admin-profile> terraform plan
 Read the deployed Function URL from Terraform:
 
 ```bash
-cd infra
-AWS_PROFILE=<admin-profile> terraform output function_url
+make lambda-url TF_AWS_PROFILE=<admin-profile>
 ```
