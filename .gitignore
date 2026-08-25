@@ -1,0 +1,19 @@
+.mise.local.toml
+
+# macOS metadata.
+.DS_Store
+._*
+
+# Terraform/OpenTofu local state and generated artifacts.
+.terraform/
+*.tfstate
+*.tfstate.*
+*.tfplan
+*.tfvars
+*.tfvars.json
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json

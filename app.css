@@ -44,7 +44,7 @@ body > hr {
 
 .fortune-actions {
   display: flex;
-  align-items: flex-end;
+  align-items: baseline;
   justify-content: space-between;
   gap: 1rem;
   padding-bottom: 0.75rem;
@@ -52,6 +52,7 @@ body > hr {
 
 .fortune-actions button {
   font-weight: 650;
+  margin: 0;
 }
 
 .webdyne-version {
@@ -59,4 +60,7 @@ body > hr {
   font-size: 0.68rem;
   font-style: normal;
   line-height: 1;
+  margin: 0;
+  text-align: right;
+  white-space: nowrap;
 }

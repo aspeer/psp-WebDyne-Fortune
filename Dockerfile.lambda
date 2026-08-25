@@ -1,0 +1,21 @@
+FROM public.ecr.aws/shogo82148/p5-aws-lambda:base-5.38.al2023
+
+ENV LANG=C.UTF-8
+ENV LC_ALL=C.UTF-8
+ENV PERL5_LAMBDA_PSGI_INVOKE_MODE=BUFFERED
+
+WORKDIR /var/task
+
+RUN dnf install -y gcc make && dnf clean all
+
+COPY cpanfile .
+RUN cpanm --notest --local-lib local --no-man-pages --installdeps .
+
+COPY cpanfile.lambda .
+RUN cpanm --notest --local-lib local --no-man-pages --cpanfile cpanfile.lambda --installdeps .
+
+COPY app.psp app_reload.psp app.pm app.css .webdyne.conf.pl ./
+COPY perl perl.dat perl.u8 ./
+COPY app.psgi handler.pl ./
+
+CMD [ "handler.handle" ]

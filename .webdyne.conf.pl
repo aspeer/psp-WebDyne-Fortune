@@ -1,6 +1,7 @@
 use WebDyne::Constant;
 $_={
     'WebDyne::Constant' => {
+        WEBDYNE_CACHE_DN            => '/tmp/webdyne-cache',
         WEBDYNE_ERROR_SHOW          => 1,
         WEBDYNE_ERROR_SHOW_EXTENDED => 1,
         WEBDYNE_HTML_PARAM          => {

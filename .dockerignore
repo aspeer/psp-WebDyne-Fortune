@@ -1,0 +1,11 @@
+.git
+.github
+.agents
+.codex
+.DS_Store
+._*
+cpanfile.snapshot
+Dockerfile
+Dockerfile.lambda
+README.md
+LICENSE

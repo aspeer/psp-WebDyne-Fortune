@@ -1,4 +1,4 @@
 requires 'Fortune';
-
-recommends 'WebDyne', '>= 3.008';
-recommends 'Plack';
+requires 'HTML::Entities';
+requires 'Plack';
+requires 'WebDyne', '>= 3.022';

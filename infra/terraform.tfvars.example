@@ -1,0 +1,13 @@
+# Copy to terraform.tfvars for local infrastructure changes.
+# terraform.tfvars is ignored by git.
+#
+# Do not put AWS access keys, secret keys, or session tokens here.
+
+region               = "ap-southeast-2"
+project_name         = "webdyne-fortune"
+image_tag            = "latest"
+lambda_memory_size   = 512
+lambda_timeout       = 15
+reserved_concurrency = 10
+log_retention_days   = 7
+deploy_user_name     = "webdyne-fortune-deployer"
