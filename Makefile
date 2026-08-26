@@ -1,6 +1,8 @@
 IMAGE_NAME ?= webdyne-fortune
 IMAGE_TAG ?= latest
 PORT ?= 8080
+AWS_VAULT_BACKEND ?= file
+AWS_VAULT_PROFILE ?= webdyne-fortune-deploy
 TF_AWS_PROFILE ?= default
 
 .PHONY: docker-build docker-run lambda-deploy lambda-url terraform-init terraform-plan terraform-deploy terraform-validate
@@ -12,7 +14,7 @@ docker-run: docker-build
 	docker run --rm -p $(PORT):8080 $(IMAGE_NAME):$(IMAGE_TAG)
 
 lambda-deploy:
-	mise run deploy-lambda
+	AWS_VAULT_BACKEND=$(AWS_VAULT_BACKEND) aws-vault exec $(AWS_VAULT_PROFILE) -- mise run deploy-lambda
 
 lambda-url:
 	AWS_PROFILE=$(TF_AWS_PROFILE) terraform -chdir=infra output -raw function_url

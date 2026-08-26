@@ -1,3 +1,2 @@
 [tasks.deploy-lambda]
-run = "AWS_PROFILE=webdyne-fortune-deploy REGION=ap-southeast-2 REPO_NAME=webdyne-fortune FUNCTION_NAME=webdyne-fortune scripts/deploy-lambda.sh"
-
+run = "REGION=ap-southeast-2 REPO_NAME=webdyne-fortune FUNCTION_NAME=webdyne-fortune scripts/deploy-lambda.sh"

@@ -4,7 +4,7 @@ This repo can also deploy the WebDyne fortune application to AWS Lambda as a
 container image.
 
 AWS infrastructure is managed by Terraform in `infra/`. Application releases are
-handled by `scripts/deploy-lambda.sh`, exposed through `mise run deploy-lambda`.
+handled by `scripts/deploy-lambda.sh`, exposed through `make lambda-deploy`.
 
 ## Security Model
 
@@ -13,36 +13,35 @@ Do not use root credentials for repeated deployment.
 The intended setup is:
 
 - Terraform/bootstrap profile: used only for infrastructure changes.
-- `webdyne-fortune-deploy` profile: used for repeated image deployments.
-- Encrypted deploy credentials: stored locally at
-  `~/.aws/webdyne-fortune-deploy-credentials.json.gpg`.
+- `webdyne-fortune-deploy` aws-vault profile: used for repeated image
+  deployments.
+- Long-lived deploy credentials: stored by `aws-vault`, not in this repo and not
+  in plaintext `~/.aws/credentials`.
 
 IAM access keys are intentionally not managed by Terraform. Terraform state can
 contain secrets, so access keys stay outside the repo and outside Terraform.
 
-## Local Credential Setup
+## Local Credential Setup With aws-vault
 
-The AWS CLI profile should use the GPG-backed credential process:
-
-```bash
-aws configure set region ap-southeast-2 --profile webdyne-fortune-deploy
-aws configure set credential_process "$(pwd)/scripts/aws-gpg-credential-process.sh" --profile webdyne-fortune-deploy
-```
-
-Create and encrypt the deploy user's access key:
+Install `aws-vault` and use the encrypted file backend on headless Linux:
 
 ```bash
-scripts/init-deploy-credentials.sh
+export AWS_VAULT_BACKEND=file
 ```
 
-That script creates one access key for `webdyne-fortune-deployer`, encrypts it to
-`~/.aws/webdyne-fortune-deploy-credentials.json.gpg`, and deletes the AWS key
-again if encryption fails.
+Store the deploy user's access key in aws-vault:
+
+```bash
+aws-vault add webdyne-fortune-deploy
+```
+
+The profile name should match the IAM deploy user managed by Terraform:
+`webdyne-fortune-deployer`.
 
 Verify the profile:
 
 ```bash
-AWS_PROFILE=webdyne-fortune-deploy aws sts get-caller-identity --region ap-southeast-2
+AWS_VAULT_BACKEND=file aws-vault exec webdyne-fortune-deploy -- aws sts get-caller-identity --region ap-southeast-2
 ```
 
 The ARN should be:
@@ -53,13 +52,17 @@ arn:aws:iam::<account-id>:user/webdyne-fortune-deployer
 
 ## Repeated Application Deployments
 
-Use the limited deploy profile through `mise`:
+Use the limited deploy profile through `make`:
 
 ```bash
-mise run deploy-lambda
+make lambda-deploy
 ```
 
-This task:
+This target runs `aws-vault exec webdyne-fortune-deploy -- mise run
+deploy-lambda`. The underlying mise task assumes AWS credentials are already
+available in the command environment.
+
+The deploy task:
 
 - builds `Dockerfile.lambda`
 - pushes `webdyne-fortune:latest` to ECR
@@ -69,6 +72,12 @@ This task:
 The deploy script does not create or modify IAM roles, ECR repositories, Function
 URLs, invoke permissions, concurrency, or log retention. Terraform owns those
 resources.
+
+To override the aws-vault profile or backend:
+
+```bash
+make lambda-deploy AWS_VAULT_PROFILE=<profile> AWS_VAULT_BACKEND=<backend>
+```
 
 ## Infrastructure
 

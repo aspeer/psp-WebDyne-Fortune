@@ -9,31 +9,31 @@ Install these tools before deploying:
 
 - `mise`
 - `aws`
+- `aws-vault`
 - `docker` or a Docker-compatible CLI such as Podman
-- `gpg`
 - `terraform`, only when managing AWS infrastructure
 
-## AWS Deploy Profile
+## AWS Deploy Credentials
 
-The deploy task expects an AWS CLI profile named `webdyne-fortune-deploy`.
+The deployment workflow expects an `aws-vault` profile named
+`webdyne-fortune-deploy`.
 
-Configure the profile from the repo root:
+On headless Linux, use the encrypted file backend:
 
 ```bash
-aws configure set region ap-southeast-2 --profile webdyne-fortune-deploy
-aws configure set credential_process "$(pwd)/scripts/aws-gpg-credential-process.sh" --profile webdyne-fortune-deploy
+export AWS_VAULT_BACKEND=file
 ```
 
-Create the encrypted local deploy credentials:
+Store the deploy IAM user's key in aws-vault:
 
 ```bash
-scripts/init-deploy-credentials.sh
+aws-vault add webdyne-fortune-deploy
 ```
 
 Verify that the profile resolves to the deploy IAM user:
 
 ```bash
-AWS_PROFILE=webdyne-fortune-deploy aws sts get-caller-identity --region ap-southeast-2
+AWS_VAULT_BACKEND=file aws-vault exec webdyne-fortune-deploy -- aws sts get-caller-identity --region ap-southeast-2
 ```
 
 ## Mise Commands
@@ -44,15 +44,20 @@ List repo tasks:
 mise tasks
 ```
 
-Deploy the Lambda application image:
+Deploy the Lambda application image through aws-vault:
 
 ```bash
-mise run deploy-lambda
+make lambda-deploy
 ```
 
-The task sets:
+`make lambda-deploy` wraps the mise task with:
 
-- `AWS_PROFILE=webdyne-fortune-deploy`
+```bash
+AWS_VAULT_BACKEND=file aws-vault exec webdyne-fortune-deploy -- mise run deploy-lambda
+```
+
+The mise task sets:
+
 - `REGION=ap-southeast-2`
 - `REPO_NAME=webdyne-fortune`
 - `FUNCTION_NAME=webdyne-fortune`
